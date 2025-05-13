@@ -1,0 +1,11 @@
+<section class="avis">
+    <h2>{{ heading | default('Avis des visiteurs') }}</h2>
+    {% for avis in reviews %}
+        <article>
+            <p><strong>{{ avis.author }}</strong>: {{ avis.comment }}</p>
+            <p>Note: {{ avis.rating }}/5</p>
+        </article>
+    {% else %}
+        <p>Aucun avis pour le moment.</p>
+    {% endfor %}
+</section>

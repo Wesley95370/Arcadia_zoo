@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil - Arcadia Zoo{% endblock %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&display=swap" rel="stylesheet">
+    {{ encore_entry_link_tags('navbar') }}
+    {{ encore_entry_link_tags('home') }}
+    {{ encore_entry_link_tags('footer') }}
+    {{ encore_entry_link_tags('avis') }}
+{% endblock %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+    <main class="main">
+        <section>
+            <h2>Découvrez notre zoo</h2>
+            <p>Explorez la richesse de la faune et de la flore.</p>
+        </section>
+        {% include 'components/avis.html.twig' with {
+            'heading': 'Ce que disent nos visiteurs',
+            'reviews': [
+                {'author': 'Jean', 'comment': 'Super zoo !', 'rating': 5},
+                {'author': 'Marie', 'comment': 'Les animaux sont magnifiques.', 'rating': 4}
+            ]
+        } %}
+    </main>
+    {% include 'components/footer.html.twig' with {'year': '2025'} %}
+{% endblock %}

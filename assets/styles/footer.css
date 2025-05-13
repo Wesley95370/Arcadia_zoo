@@ -1,0 +1,56 @@
+.footer {
+    background-color: #2E7032;
+    color: white;
+    padding: 2rem 1rem;
+    font-family: 'Merriweather', serif;
+}
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1728px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+.footer-logo {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+.footer-logo-img {
+    max-height: 250px; /* Ajuste selon la taille du logo dans le design */
+}
+.footer-contact {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 55px;
+}
+.footer-explore {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem;
+}
+.footer-contact h3, .footer-explore h3 {
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.footer-contact p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+.footer-explore-list {
+    list-style: none;
+    padding: 0;
+}
+.footer-explore-list li {
+    margin-bottom: 0.5rem;
+}
+.footer-explore-list li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+.footer-explore-list li a:hover {
+    color: #F1E7D0;
+}
