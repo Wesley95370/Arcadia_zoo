@@ -1,18 +1,51 @@
 {% extends 'base.html.twig' %}
 {% block title %}Accueil - Arcadia Zoo{% endblock %}
 {% block stylesheets %}
-    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     {{ encore_entry_link_tags('navbar') }}
     {{ encore_entry_link_tags('home') }}
     {{ encore_entry_link_tags('footer') }}
     {{ encore_entry_link_tags('avis') }}
+    {{ encore_entry_link_tags('hero') }}
 {% endblock %}
 {% block body %}
     {% include 'components/navbar.html.twig' %}
     <main class="main">
-        <section>
-            <h2>Découvrez notre zoo</h2>
-            <p>Explorez la richesse de la faune et de la flore.</p>
+        <section class="home-section">
+            <div class="home-text">
+                <h1 class="home-title">Le Zoo ARCADIA , un lieu préservé pour s’émerveiller</h1>
+                <p class="home-description">Niché au cœur d'un espace arboré de 18 hectares dans la légendaire forêt de Brocéliande, le Parc Zoologique Arcadia est la réalisation de la vision de José, désireux depuis l'enfance de partager sa passion des animaux avec le public. Attachant une importance de premier plan au bien-être de nos pensionnaires, nous vous proposons une expérience unique dans un cadre idyllique, dans les pas de Merlin, Viviane et Arthur, pour vous émerveiller de la diversité animale de notre monde au gré de nos 4 habitats (savane, jungle, marais, Moria) qui regroupent 14 merveilleux animaux !</p>
+            </div>
+            <div class="home-image">
+                <img src="/images/image_nuage.png" alt="Image Nuage" class="home-image-img">
+                <p class="home-temperature">5°-23°</p>
+            </div>
+        </section>
+        {% set opening_hours = {
+            'Lundi': '9h-17h',
+            'Mardi': '9h-17h',
+            'Mercredi': '9h-17h',
+            'Jeudi': '9h-17h',
+            'Vendredi': '9h-17h',
+            'Samedi': '9h-17h',
+            'Dimanche': '9h-17h'
+        } %}
+        <section class="home-section-two">
+            <div class="home-left">
+                <img src="/images/image_localisation.png" alt="Localisation" class="home-left-img">
+                <h2 class="home-opening-title">Horaires d’ouverture</h2>
+                <ul class="home-opening-list">
+                    {% for day, hours in opening_hours %}
+                        <li>{{ day }} : {{ hours }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="home-right">
+                <img src="/images/photo_singedoigt.png" alt="Singe Doigt" class="home-right-img">
+            </div>
+        </section>
+        <section class="home-giraffe-section">
+            <img src="/images/image_girafe.jpg" alt="Groupe de Girafes" class="home-giraffe-img">
         </section>
         {% include 'components/avis.html.twig' with {
             'heading': 'Ce que disent nos visiteurs',

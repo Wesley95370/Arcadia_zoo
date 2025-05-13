@@ -1,15 +1,101 @@
-main {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 1rem;
+.main {
+    width: 100%;
 }
-.avis {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.home-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #8B5E3C;
+    padding: 2rem;
 }
-.avis article {
+.home-text {
+    flex: 1;
+    min-width: 300px;
+    padding-right: 2rem;
+    text-align: center;
+}
+.home-title {
+    font-family: 'Peralta', cursive;
+    font-size: 2.5rem;
+    color: #F1E7D0;
+    text-align: center;
     margin-bottom: 1rem;
+}
+.home-description {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #F1E7D0;
+    line-height: 1.6;
+}
+.home-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+.home-image-img {
+    max-width: 100%;
+    height: auto;
+}
+.home-temperature {
+    font-family: 'Merriweather', serif;
+    font-size: 1.5rem;
+    color: #F1E7D0;
+    margin-top: 1rem;
+}
+.home-section-two {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background-color: #8B5E3C;
+    padding: 2rem;
+    position: relative;
+}
+.home-left {
+    flex: 1;
+    min-width: 300px;
+    padding-right: 2rem;
+    text-align: center;
+}
+.home-left-img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+}
+.home-opening-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    color: #F1E7D0;
+    margin-bottom: 1rem;
+}
+.home-opening-list {
+    list-style: none;
+    padding: 0;
+}
+.home-opening-list li {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #F1E7D0;
+    margin-bottom: 0.5rem;
+}
+.home-right {
+    flex: 1;
+    min-width: 300px;
+    text-align: right;
+    position: relative;
+}
+.home-right-img {
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+    bottom: -32px;
+    right: 0;
+}
+.home-giraffe-section {
+    width: 100%;
+    margin: 2rem 0;
+}
+.home-giraffe-img {
+    width: 100%;
+    margin-top: -32px;
 }
