@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Activités - Arcadia Zoo{% endblock %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    {{ encore_entry_link_tags('navbar') }}
+    {{ encore_entry_link_tags('activites') }}
+    {{ encore_entry_link_tags('footer') }}
+{% endblock %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+    <main class="main">
+        <section class="activites-section">
+            <h1 class="activites-title">Nos Activités</h1>
+            <div class="activites-grid">
+                <div class="activites-card">
+                    <img src="/images/image_restauration.jpg" alt="Restauration" class="activites-image">
+                    <div class="activites-text">
+                        <h2>Restauration :</h2>
+                        <p>Le Zoo Arcadia propose un espace de restauration convivial et familial pour vous restaurer au cours de votre visite.</p>
+                    </div>
+                </div>
+                <div class="activites-card">
+                    <img src="/images/image_visite_guidee.jpg" alt="Visite Guidée" class="activites-image">
+                    <div class="activites-text">
+                        <h2>Visite guidée :</h2>
+                        <p>Le Zoo Arcadia vous propose une prestation de visite guidée.</p>
+                        <p>Tarif : Gratuit</p>
+                    </div>
+                </div>
+                <div class="activites-card">
+                    <img src="/images/image_petit_train.jpg" alt="Visite en Petit Train" class="activites-image">
+                    <div class="activites-text">
+                        <h2>Visite en petit train :</h2>
+                        <p>Le Zoo Arcadia vous propose une visite en petit train pour découvrir le parc sans se fatiguer !</p>
+                        <p>Tarif : 10€</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% include 'components/footer.html.twig' with {'year': '2025'} %}
+{% endblock %}

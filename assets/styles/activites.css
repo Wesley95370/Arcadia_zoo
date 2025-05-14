@@ -1,0 +1,78 @@
+.activites-section {
+    background-color: #F5E8C7;
+    padding: 2rem;
+    text-align: center;
+}
+
+.activites-title {
+    font-family: 'Peralta', sans-serif;
+    font-size: 3rem;
+    color: #8B5E3C;
+    margin-bottom: 2rem;
+}
+
+.activites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+}
+
+.activites-card {
+    background-color: #8B5E3C;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+}
+
+.activites-image {
+    width: 100%;
+    height: auto;
+}
+
+.activites-text {
+    padding: 1rem;
+    color: #F1E7D0;
+}
+
+.activites-text h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.activites-text p {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.contact-explorer-section {
+    display: flex;
+    justify-content: space-around;
+    background-color: #2E7D32;
+    padding: 2rem;
+    color: #FFFFFF;
+}
+
+.contact-card, .explorer-card {
+    text-align: center;
+}
+
+.contact-logo {
+    width: 150px;
+    margin-bottom: 1rem;
+}
+
+.contact-text h2, .explorer-card h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.contact-text p, .explorer-card p {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}

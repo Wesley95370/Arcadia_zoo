@@ -8,6 +8,8 @@ Encore
     .addEntry('home', './assets/styles/home.css')
     .addEntry('footer', './assets/styles/footer.css')
     .addEntry('avis', './assets/styles/avis.css')
+    .addEntry('animaux', './assets/styles/animaux.css')
+    .addEntry('activites', './assets/styles/activites.css')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()

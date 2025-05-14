@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Animaux - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/animaux.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/_navbar.html.twig') }}
+
+    <div class="animals-page">
+        <!-- Barre de filtre -->
+        <div class="filter-bar">
+            <h2 class="filter-title">Habitat</h2>
+            <div class="filter-list">
+                <button class="filter-button active" data-habitat="Tout" onclick="filterAnimals('Tout')">Tout</button>
+                <button class="filter-button" data-habitat="Jungle" onclick="filterAnimals('Jungle')">Jungle</button>
+                <button class="filter-button" data-habitat="Savane" onclick="filterAnimals('Savane')">Savane</button>
+                <button class="filter-button" data-habitat="Marais" onclick="filterAnimals('Marais')">Marais</button>
+            </div>
+        </div>
+
+        <!-- Liste des animaux -->
+        <div class="animals-grid">
+            {% for animal in animals %}
+                <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal|json_encode|raw }})">
+                    <img src="{{ animal.image }}" alt="{{ animal.name }}">
+                    <h3>{{ animal.name }}</h3>
+                    <p>Visites : <span class="visit-count">{{ animal.visits }}</span></p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Modal pour les détails de l'animal -->
+        <div class="modal" id="animalModal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modal-animal-name"></h2>
+                <img id="modal-animal-image" src="" alt="">
+                <p><strong>Race :</strong> <span id="modal-animal-race"></span></p>
+                <p><strong>Habitat :</strong> <span id="modal-animal-habitat"></span></p>
+                <p><strong>Description :</strong> <span id="modal-animal-description"></span></p>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <form id="update-animal-form" onsubmit="updateAnimal(event)">
+                        <input type="hidden" id="modal-animal-id">
+                        <label>
+                            Race :
+                            <input type="text" name="race" id="edit-animal-race">
+                        </label>
+                        <label>
+                            Description :
+                            <textarea name="description" id="edit-animal-description"></textarea>
+                        </label>
+                        <button type="submit">Mettre à jour</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {{ include('components/_footer.html.twig') }}
+
+    <script>
+        // Données initiales des animaux (passées depuis le contrôleur)
+        let animals = {{ animals|json_encode|raw }};
+
+        // Filtrer les animaux par habitat
+        function filterAnimals(habitat) {
+            const buttons = document.querySelectorAll('.filter-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-button[data-habitat="${habitat}"]`).classList.add('active');
+
+            let filteredAnimals;
+            if (habitat === 'Tout') {
+                filteredAnimals = animals;
+            } else {
+                filteredAnimals = animals.filter(animal => animal.habitat === habitat);
+            }
+
+            const grid = document.querySelector('.animals-grid');
+            grid.innerHTML = '';
+            filteredAnimals.forEach(animal => {
+                grid.innerHTML += `
+                    <div class="animal-card" data-animal-id="${animal.idAnimal}" onclick="showAnimalModal(${JSON.stringify(animal)})">
+                        <img src="${animal.image}" alt="${animal.name}">
+                        <h3>${animal.name}</h3>
+                        <p>Visites : <span class="visit-count">${animal.visits}</span></p>
+                    </div>
+                `;
+            });
+        }
+
+        // Afficher le modal avec les détails de l'animal
+        function showAnimalModal(animal) {
+            // Incrémenter le compteur de visites
+            fetch(`/api/animals/${animal.idAnimal}/increment-visits`, { method: 'POST' })
+                .then(response => response.json())
+                .then(updatedAnimal => {
+                    animals = animals.map(a => a.idAnimal === updatedAnimal.idAnimal ? updatedAnimal : a);
+                    document.querySelector(`.animal-card[data-animal-id="${animal.idAnimal}"] .visit-count`).textContent = updatedAnimal.visits;
+                });
+
+            // Remplir le modal
+            const modal = document.getElementById('animalModal');
+            document.getElementById('modal-animal-name').textContent = animal.name;
+            document.getElementById('modal-animal-image').src = animal.image;
+            document.getElementById('modal-animal-race').textContent = animal.race;
+            document.getElementById('modal-animal-habitat').textContent = animal.habitat;
+            document.getElementById('modal-animal-description').textContent = animal.description;
+
+            // Pré-remplir le formulaire pour l'admin
+            {% if is_granted('ROLE_ADMIN') %}
+                document.getElementById('modal-animal-id').value = animal.idAnimal;
+                document.getElementById('edit-animal-race').value = animal.race;
+                document.getElementById('edit-animal-description').value = animal.description;
+            {% endif %}
+
+            modal.style.display = 'flex';
+        }
+
+        // Fermer le modal
+        function closeModal() {
+            document.getElementById('animalModal').style.display = 'none';
+        }
+
+        // Mettre à jour les informations de l'animal (admin uniquement)
+        function updateAnimal(event) {
+            event.preventDefault();
+            const form = event.target;
+            const animalId = document.getElementById('modal-animal-id').value;
+            const updatedAnimal = {
+                race: form.race.value,
+                description: form.description.value,
+            };
+
+            fetch(`/api/animals/${animalId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedAnimal),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    animals = animals.map(a => a.idAnimal === data.idAnimal ? data : a);
+                    document.getElementById('modal-animal-race').textContent = data.race;
+                    document.getElementById('modal-animal-description').textContent = data.description;
+                    filterAnimals(document.querySelector('.filter-button.active').dataset.habitat); // Rafraîchir la grille
+                    closeModal();
+                });
+        }
+    </script>
+{% endblock %}
