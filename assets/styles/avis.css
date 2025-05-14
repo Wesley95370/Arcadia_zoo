@@ -1,10 +1,90 @@
-.avis {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+section.avis-section {
+    background-color: #8B5E3C;
+    padding: 2rem;
+    text-align: center;
 }
-.avis article {
+.avis-separator {
+    width: 100%;
+    height: 2px;
+    background-color: #FFFFFF;
+    margin: 0 auto 2rem;
+}
+.avis-title {
+    font-family: 'Caveat', cursive;
+    font-size: 2.5rem;
+    color: #FFFFFF;
+    margin-bottom: 2rem;
+}
+.avis-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.avis-prev,
+.avis-next {
+    background-color: #2E7D32;
+    color: #FFFFFF;
+    border: none;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.avis-prev {
+    left: -3rem;
+}
+.avis-next {
+    right: -3rem;
+}
+.avis-prev:hover,
+.avis-next:hover {
+    background-color: #1B5E20;
+}
+.avis-card {
+    background-color: #2E7D32;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 400px;
+    color: #FFFFFF;
+}
+.avis-name {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
     margin-bottom: 1rem;
+}
+.avis-comment {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.avis-stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.avis-stars .star {
+    font-size: 1.5rem;
+    color: #F1E7D0;
+}
+.avis-leave-review {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 0.5rem 2rem;
+    border: 2px solid #2E7D32;
+    background: #2E7D32;
+    border-radius: 50px;
+    margin-top: 2rem;
+}
+.avis-leave-review:hover {
+    background-color: #1B5E20;
+    color: #F1E7D0;
 }

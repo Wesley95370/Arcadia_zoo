@@ -47,13 +47,23 @@
         <section class="home-giraffe-section">
             <img src="/images/image_girafe.jpg" alt="Groupe de Girafes" class="home-giraffe-img">
         </section>
-        {% include 'components/avis.html.twig' with {
-            'heading': 'Ce que disent nos visiteurs',
-            'reviews': [
-                {'author': 'Jean', 'comment': 'Super zoo !', 'rating': 5},
-                {'author': 'Marie', 'comment': 'Les animaux sont magnifiques.', 'rating': 4}
-            ]
-        } %}
+        {% set top_animals = [
+            {'name': 'Koba', 'image': 'image_gorille_rond.jpg', 'slug': 'Koba'},
+            {'name': 'Simba', 'image': 'image_lion_rond.jpg', 'slug': 'Simba'}
+        ] %}
+        <section class="home-stars-section">
+            <h2 class="home-stars-title">Les stars du zoo !</h2>
+            <div class="home-stars-animals">
+                {% for animal in top_animals %}
+                    <a href="#" class="home-animal-link">
+                        <img src="/images/{{ animal.image }}" alt="{{ animal.name }}" class="home-animal-img">
+                        <p class="home-animal-name">{{ animal.name }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+            <a href="#" class="home-all-animals-link">Voir tous les animaux</a>
+        </section>
+        {% include 'components/avis.html.twig' %}
     </main>
     {% include 'components/footer.html.twig' with {'year': '2025'} %}
 {% endblock %}

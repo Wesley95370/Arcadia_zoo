@@ -1,11 +1,65 @@
-<section class="avis">
-    <h2>{{ heading | default('Avis des visiteurs') }}</h2>
-    {% for avis in reviews %}
-        <article>
-            <p><strong>{{ avis.author }}</strong>: {{ avis.comment }}</p>
-            <p>Note: {{ avis.rating }}/5</p>
-        </article>
-    {% else %}
-        <p>Aucun avis pour le moment.</p>
-    {% endfor %}
+{% set reviews = [
+    {
+        'name': 'Damien',
+        'comment': 'Le zoo est agréable et ombragé, c’est un plaisir de s’y promener en famille. Les animaux sont beaux, et semblent heureux et en bonne santé!',
+        'rating': 5
+    },
+    {
+        'name': 'Sophie',
+        'comment': 'Une expérience magique ! Les habitats sont bien conçus et le personnel est accueillant.',
+        'rating': 4
+    },
+    {
+        'name': 'Lucas',
+        'comment': 'Super pour les enfants, mais un peu cher pour une famille nombreuse.',
+        'rating': 3
+    }
+] %}
+<section class="avis-section">
+    <div class="avis-separator"></div>
+    <h2 class="avis-title">Les avis des visiteurs</h2>
+    <div class="avis-container">
+        <button class="avis-prev"><</button>
+        <div class="avis-cards">
+            {% for review in reviews %}
+                <div class="avis-card" style="{% if loop.index0 != 0 %}display: none;{% endif %}">
+                    <h3 class="avis-name">{{ review.name }}</h3>
+                    <p class="avis-comment">{{ review.comment }}</p>
+                    <div class="avis-stars">
+                        {% for i in 1..5 %}
+                            <span class="star">{{ i <= review.rating ? '★' : '☆' }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="avis-next">></button>
+    </div>
+    <a href="#" class="avis-leave-review">Laissez nous votre avis !</a>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.avis-card');
+        const prevBtn = document.querySelector('.avis-prev');
+        const nextBtn = document.querySelector('.avis-next');
+        let currentIndex = 0;
+
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            showCard(currentIndex);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % cards.length;
+            showCard(currentIndex);
+        });
+
+        showCard(currentIndex);
+    });
+</script>
