@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    {{ include('components/_navbar.html.twig') }}
+    {{ include('components/navbar.html.twig') }}
 
     <div class="animals-page">
         <!-- Barre de filtre -->
@@ -22,13 +22,18 @@
             </div>
         </div>
 
+        <!-- Bouton pour ajouter un animal (admin uniquement) -->
+        {% if is_granted('ROLE_ADMIN') %}
+            <button class="btn btn-primary" onclick="showAddAnimalModal()">Ajouter un animal</button>
+        {% endif %}
+
         <!-- Liste des animaux -->
         <div class="animals-grid">
             {% for animal in animals %}
                 <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal|json_encode|raw }})">
-                    <img src="{{ animal.image }}" alt="{{ animal.name }}">
+                    <img src="{{ animal.image.url|default('/images/ArcadiaLogo.png') }}" alt="{{ animal.name }}">
                     <h3>{{ animal.name }}</h3>
-                    <p>Visites : <span class="visit-count">{{ animal.visits }}</span></p>
+                    <p>Visites : <span class="visit-count">{{ animal.visits|default(0) }}</span></p>
                 </div>
             {% endfor %}
         </div>
@@ -36,7 +41,7 @@
         <!-- Modal pour les détails de l'animal -->
         <div class="modal" id="animalModal" style="display: none;">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
+                <span class="close" onclick="closeModal()">×</span>
                 <h2 id="modal-animal-name"></h2>
                 <img id="modal-animal-image" src="" alt="">
                 <p><strong>Race :</strong> <span id="modal-animal-race"></span></p>
@@ -56,16 +61,79 @@
                         </label>
                         <button type="submit">Mettre à jour</button>
                     </form>
+                    <button class="btn btn-danger" onclick="deleteAnimal()">Supprimer</button>
                 {% endif %}
             </div>
         </div>
+
+        <!-- Modal pour ajouter un animal (admin uniquement) -->
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="modal" id="addAnimalModal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeAddModal()">×</span>
+                    <h2>Ajouter un animal</h2>
+                    <form id="add-animal-form" onsubmit="addAnimal(event)">
+                        <label>
+                            Nom :
+                            <input type="text" name="name" id="add-animal-name" required>
+                        </label>
+                        <label>
+                            Race :
+                            <input type="text" name="race" id="add-animal-race" required>
+                        </label>
+                        <label>
+                            Image :
+                            <select name="image" id="add-animal-image" required>
+                                <option value="">Sélectionnez une image</option>
+                                <option value="/images/638496693869536822_Mufasa_mini.jpg">638496693869536822_Mufasa_mini.jpg</option>
+                                <option value="/images/ArcadiaLogo.png">ArcadiaLogo.png</option>
+                                <option value="/images/image_girafe.jpg">image_girafe.jpg</option>
+                                <option value="/images/image_gorille_rond.jpg">image_gorille_rond.jpg</option>
+                                <option value="/images/image_lion_rond.jpg">image_lion_rond.jpg</option>
+                                <option value="/images/image_localisation.png">image_localisation.png</option>
+                                <option value="/images/image_nuage.png">image_nuage.png</option>
+                                <option value="/images/image_petit_train.jpg">image_petit_train.jpg</option>
+                                <option value="/images/image_restauration.jpg">image_restauration.jpg</option>
+                                <option value="/images/image_visite_guidee.jpg">image_visite_guidee.jpg</option>
+                                <option value="/images/l_orang_outant_mini.jpg">l_orang_outant_mini.jpg</option>
+                                <option value="/images/l_orang_outan2_mini.jpg">l_orang_outan2_mini.jpg</option>
+                                <option value="/images/la_loutre1_mini.jpg">la_loutre1_mini.jpg</option>
+                                <option value="/images/la_loutre2_mini.jpg">la_loutre2_mini.jpg</option>
+                                <option value="/images/la_panthere1_mini.jpg">la_panthere1_mini.jpg</option>
+                                <option value="/images/la_panthere2_mini.jpg">la_panthere2_mini.jpg</option>
+                                <option value="/images/le_heron1_mini.jpg">le_heron1_mini.jpg</option>
+                                <option value="/images/le_heron2_mini.jpg">le_heron2_mini.jpg</option>
+                                <option value="/images/le_rhino1_mini.jpg">le_rhino1_mini.jpg</option>
+                                <option value="/images/le_rhino2_mini.jpg">le_rhino2_mini.jpg</option>
+                                <option value="/images/photo_lion_navbar.webp">photo_lion_navbar.webp</option>
+                                <option value="/images/photo_singedoigt.png">photo_singedoigt.png</option>
+                            </select>
+                        </label>
+                        <label>
+                            Habitat :
+                            <select name="habitat" id="add-animal-habitat" required>
+                                <option value="">Sélectionnez un habitat</option>
+                                <option value="1">Jungle</option>
+                                <option value="2">Savane</option>
+                                <option value="3">Marais</option>
+                            </select>
+                        </label>
+                        <label>
+                            Description :
+                            <textarea name="description" id="add-animal-description"></textarea>
+                        </label>
+                        <button type="submit">Ajouter</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
-    {{ include('components/_footer.html.twig') }}
+    {{ include('components/footer.html.twig') }}
 
     <script>
         // Données initiales des animaux (passées depuis le contrôleur)
-        let animals = {{ animals|json_encode|raw }};
+        let animals = {{ jsonAnimals|raw }};
 
         // Filtrer les animaux par habitat
         function filterAnimals(habitat) {
@@ -77,7 +145,7 @@
             if (habitat === 'Tout') {
                 filteredAnimals = animals;
             } else {
-                filteredAnimals = animals.filter(animal => animal.habitat === habitat);
+                filteredAnimals = animals.filter(animal => animal.habitat?.name === habitat);
             }
 
             const grid = document.querySelector('.animals-grid');
@@ -85,9 +153,9 @@
             filteredAnimals.forEach(animal => {
                 grid.innerHTML += `
                     <div class="animal-card" data-animal-id="${animal.idAnimal}" onclick="showAnimalModal(${JSON.stringify(animal)})">
-                        <img src="${animal.image}" alt="${animal.name}">
+                        <img src="${animal.image?.url || '/images/ArcadiaLogo.png'}" alt="${animal.name}">
                         <h3>${animal.name}</h3>
-                        <p>Visites : <span class="visit-count">${animal.visits}</span></p>
+                        <p>Visites : <span class="visit-count">${animal.visits || 0}</span></p>
                     </div>
                 `;
             });
@@ -100,30 +168,68 @@
                 .then(response => response.json())
                 .then(updatedAnimal => {
                     animals = animals.map(a => a.idAnimal === updatedAnimal.idAnimal ? updatedAnimal : a);
-                    document.querySelector(`.animal-card[data-animal-id="${animal.idAnimal}"] .visit-count`).textContent = updatedAnimal.visits;
+                    document.querySelector(`.animal-card[data-animal-id="${animal.idAnimal}"] .visit-count`).textContent = updatedAnimal.visits || 0;
                 });
 
             // Remplir le modal
             const modal = document.getElementById('animalModal');
             document.getElementById('modal-animal-name').textContent = animal.name;
-            document.getElementById('modal-animal-image').src = animal.image;
+            document.getElementById('modal-animal-image').src = animal.image?.url || '/images/ArcadiaLogo.png';
             document.getElementById('modal-animal-race').textContent = animal.race;
-            document.getElementById('modal-animal-habitat').textContent = animal.habitat;
-            document.getElementById('modal-animal-description').textContent = animal.description;
+            document.getElementById('modal-animal-habitat').textContent = animal.habitat?.name || 'Aucun';
+            document.getElementById('modal-animal-description').textContent = animal.description || 'Aucune description';
 
             // Pré-remplir le formulaire pour l'admin
             {% if is_granted('ROLE_ADMIN') %}
                 document.getElementById('modal-animal-id').value = animal.idAnimal;
                 document.getElementById('edit-animal-race').value = animal.race;
-                document.getElementById('edit-animal-description').value = animal.description;
+                document.getElementById('edit-animal-description').value = animal.description || '';
             {% endif %}
 
             modal.style.display = 'flex';
         }
 
-        // Fermer le modal
+        // Fermer le modal des détails
         function closeModal() {
             document.getElementById('animalModal').style.display = 'none';
+        }
+
+        // Afficher le modal pour ajouter un animal (admin uniquement)
+        function showAddAnimalModal() {
+            const modal = document.getElementById('addAnimalModal');
+            modal.style.display = 'flex';
+        }
+
+        // Fermer le modal d'ajout
+        function closeAddModal() {
+            document.getElementById('addAnimalModal').style.display = 'none';
+        }
+
+        // Ajouter un animal (admin uniquement)
+        function addAnimal(event) {
+            event.preventDefault();
+            const form = event.target;
+            const newAnimal = {
+                name: form.name.value,
+                race: form.race.value,
+                image: { url: form.image.value },
+                idHabitat: parseInt(form.habitat.value),
+                description: form.description.value,
+                visits: 0,
+            };
+
+            fetch('/api/animals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newAnimal),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    animals.push(data);
+                    filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
+                    closeAddModal();
+                })
+                .catch(error => console.error('Erreur lors de l\'ajout :', error));
         }
 
         // Mettre à jour les informations de l'animal (admin uniquement)
@@ -145,10 +251,27 @@
                 .then(data => {
                     animals = animals.map(a => a.idAnimal === data.idAnimal ? data : a);
                     document.getElementById('modal-animal-race').textContent = data.race;
-                    document.getElementById('modal-animal-description').textContent = data.description;
-                    filterAnimals(document.querySelector('.filter-button.active').dataset.habitat); // Rafraîchir la grille
+                    document.getElementById('modal-animal-description').textContent = data.description || 'Aucune description';
+                    filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
                     closeModal();
-                });
+                })
+                .catch(error => console.error('Erreur lors de la mise à jour :', error));
+        }
+
+        // Supprimer un animal (admin uniquement)
+        function deleteAnimal() {
+            const animalId = document.getElementById('modal-animal-id').value;
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
+                fetch(`/api/animals/${animalId}`, {
+                    method: 'DELETE',
+                })
+                    .then(() => {
+                        animals = animals.filter(a => a.idAnimal !== parseInt(animalId));
+                        filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
+                        closeModal();
+                    })
+                    .catch(error => console.error('Erreur lors de la suppression :', error));
+            }
         }
     </script>
 {% endblock %}

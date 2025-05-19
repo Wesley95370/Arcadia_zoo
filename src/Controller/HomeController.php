@@ -20,10 +20,4 @@ class HomeController extends AbstractController
     {
         return $this->render('activites/index.html.twig');
     }
-
-     #[Route('/animaux', name: 'animaux')]
-    public function activites(): Response
-    {
-        return $this->render('animaux/index.html.twig');
-    }
 }
