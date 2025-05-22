@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/animaux.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/contact.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/navbar.html.twig') }}
+
+    <div class="contact-page">
+        <div class="contact-header">
+            <h1>Contactez-nous !</h1>
+        </div>
+        <div class="contact-form-container">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <form method="post" action="{{ path('app_contact') }}">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" placeholder="Entrez votre email..." required>
+
+                <label for="sujet">sujet</label>
+                <input type="text" id="sujet" name="sujet" placeholder="Sujet..." required>
+
+                <label for="message">Dites nous tout !</label>
+                <textarea id="message" name="message" rows="5" placeholder="On vous écoute..." required></textarea>
+
+                <button type="submit">Envoyer</button>
+            </form>
+        </div>
+    </div>
+
+    {{ include('components/footer.html.twig') }}
+{% endblock %}

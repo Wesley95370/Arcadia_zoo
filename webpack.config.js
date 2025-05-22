@@ -9,6 +9,7 @@ Encore
     .addEntry('footer', './assets/styles/footer.css')
     .addEntry('avis', './assets/styles/avis.css')
     .addEntry('animaux', './assets/styles/animaux.css')
+    .addEntry('contact', './assets/styles/contact.css')
     .addEntry('activites', './assets/styles/activites.css')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

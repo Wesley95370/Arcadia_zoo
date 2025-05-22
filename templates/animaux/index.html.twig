@@ -30,7 +30,7 @@
         <!-- Liste des animaux -->
         <div class="animals-grid">
             {% for animal in animals %}
-                <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal|json_encode|raw }})">
+                <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal.idAnimal }})">
                     <img src="{{ animal.image.url|default('/images/ArcadiaLogo.png') }}" alt="{{ animal.name }}">
                     <h3>{{ animal.name }}</h3>
                     <p>Visites : <span class="visit-count">{{ animal.visits|default(0) }}</span></p>
@@ -134,9 +134,11 @@
     <script>
         // Données initiales des animaux (passées depuis le contrôleur)
         let animals = {{ jsonAnimals|raw }};
+        console.log('Animals data:', animals);
 
         // Filtrer les animaux par habitat
         function filterAnimals(habitat) {
+            console.log('Filtrage pour habitat:', habitat);
             const buttons = document.querySelectorAll('.filter-button');
             buttons.forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.filter-button[data-habitat="${habitat}"]`).classList.add('active');
@@ -145,24 +147,42 @@
             if (habitat === 'Tout') {
                 filteredAnimals = animals;
             } else {
-                filteredAnimals = animals.filter(animal => animal.habitat?.name === habitat);
+                filteredAnimals = animals.filter(animal => {
+                    const habitatName = animal.habitat?.name?.trim();
+                    console.log(`Comparing ${habitatName} with ${habitat}`);
+                    return habitatName === habitat;
+                });
             }
 
             const grid = document.querySelector('.animals-grid');
             grid.innerHTML = '';
-            filteredAnimals.forEach(animal => {
-                grid.innerHTML += `
-                    <div class="animal-card" data-animal-id="${animal.idAnimal}" onclick="showAnimalModal(${JSON.stringify(animal)})">
-                        <img src="${animal.image?.url || '/images/ArcadiaLogo.png'}" alt="${animal.name}">
-                        <h3>${animal.name}</h3>
-                        <p>Visites : <span class="visit-count">${animal.visits || 0}</span></p>
-                    </div>
-                `;
-            });
+            if (filteredAnimals.length === 0) {
+                grid.innerHTML = '<p>Aucun animal trouvé pour cet habitat.</p>';
+            } else {
+                filteredAnimals.forEach(animal => {
+                    grid.innerHTML += `
+                        <div class="animal-card" data-animal-id="${animal.idAnimal}" onclick="showAnimalModal(${animal.idAnimal})">
+                            <img src="${animal.image?.url || '/images/ArcadiaLogo.png'}" alt="${animal.name}">
+                            <h3>${animal.name}</h3>
+                            <p>Visites : <span class="visit-count">${animal.visits || 0}</span></p>
+                        </div>
+                    `;
+                });
+            }
         }
 
         // Afficher le modal avec les détails de l'animal
-        function showAnimalModal(animal) {
+        function showAnimalModal(animalId) {
+            // Trouver l’animal dans le tableau animals
+            const animal = animals.find(a => a.idAnimal === animalId);
+            if (!animal) {
+                console.error('Animal non trouvé:', animalId);
+                return;
+            }
+
+            console.log('Animal clicked:', animal);
+            console.log('Image data:', animal.image);
+
             // Incrémenter le compteur de visites
             fetch(`/api/animals/${animal.idAnimal}/increment-visits`, { method: 'POST' })
                 .then(response => response.json())
@@ -174,7 +194,25 @@
             // Remplir le modal
             const modal = document.getElementById('animalModal');
             document.getElementById('modal-animal-name').textContent = animal.name;
-            document.getElementById('modal-animal-image').src = animal.image?.url || '/images/ArcadiaLogo.png';
+
+            // Gérer différents formats d'image
+            let imageUrl = '/images/ArcadiaLogo.png'; // Fallback par défaut
+            if (animal.image) {
+                try {
+                    // Si animal.image est une chaîne JSON, parser
+                    const imageObj = typeof animal.image === 'string' ? JSON.parse(animal.image) : animal.image;
+                    if (imageObj && imageObj.url) {
+                        imageUrl = imageObj.url;
+                    } else if (typeof animal.image === 'string') {
+                        imageUrl = animal.image; // Cas où image est juste une URL
+                    }
+                } catch (e) {
+                    console.error('Erreur lors du parsing de l\'image:', e);
+                }
+            }
+            console.log('Image URL set to:', imageUrl);
+            document.getElementById('modal-animal-image').src = imageUrl;
+
             document.getElementById('modal-animal-race').textContent = animal.race;
             document.getElementById('modal-animal-habitat').textContent = animal.habitat?.name || 'Aucun';
             document.getElementById('modal-animal-description').textContent = animal.description || 'Aucune description';
@@ -273,5 +311,8 @@
                     .catch(error => console.error('Erreur lors de la suppression :', error));
             }
         }
+
+        // Appel initial pour afficher tous les animaux
+        filterAnimals('Tout');
     </script>
 {% endblock %}

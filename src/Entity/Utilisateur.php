@@ -12,7 +12,7 @@ class Utilisateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: 'id_utilisateur')]
     private ?int $idUtilisateur = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -28,6 +28,15 @@ class Utilisateur
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'utilisateurs')]
+    #[ORM\JoinTable(
+        name: 'user_service',
+        joinColumns: [
+            new ORM\JoinColumn(name: 'id_utilisateur', referencedColumnName: 'id_utilisateur')
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(name: 'id_service', referencedColumnName: 'id_service')
+        ]
+    )]
     private Collection $services;
 
     public function __construct()

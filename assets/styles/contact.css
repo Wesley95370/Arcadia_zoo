@@ -1,0 +1,102 @@
+/* Réglages généraux de la page */
+div.contact-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* En-tête avec le titre */
+div.contact-page .contact-header {
+    background-color: #8B4513 !important; /* Ajout de !important pour tester */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+div.contact-page .contact-header h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+/* Conteneur du formulaire */
+div.contact-page .contact-form-container {
+    background-color: #F5F5DC !important; /* Ajout de !important pour tester */
+    padding: 30px;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+/* Style des labels du formulaire */
+div.contact-page .contact-form-container .contact-form label {
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #5C4033;
+}
+
+/* Style des champs d'entrée et textarea */
+div.contact-page .contact-form-container .contact-form input,
+div.contact-page .contact-form-container .contact-form textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+}
+
+/* Style du bouton Envoyer */
+div.contact-page .contact-form-container .contact-form button {
+    background-color: #5C4033;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Peralta', cursive;
+    font-size: 1rem;
+}
+
+div.contact-page .contact-form-container .contact-form button:hover {
+    background-color: #3F2A1A;
+}
+
+/* Section inférieure avec logo et colonnes */
+div.contact-page .contact-footer {
+    background-color: #2e7d32 !important; /* Ajout de !important pour tester */
+    color: white;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+div.contact-page .contact-footer div {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+    text-align: left;
+}
+
+div.contact-page .contact-footer h3 {
+    font-family: 'Peralta', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+div.contact-page .contact-footer p {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+div.contact-page .contact-footer .logo img {
+    max-width: 150px;
+    margin-bottom: 15px;
+}
