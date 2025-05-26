@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rapports vétérinaires - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/navbar.html.twig') }}
+
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>Rapports vétérinaires</h1>
+        </div>
+
+        <div class="admin-form-container">
+            <h2>Filtres</h2>
+            <form method="get">
+                <label for="animal">Animal :</label>
+                <select id="animal" name="animal">
+                    <option value="">Tous</option>
+                    {% for animal in animals %}
+                        <option value="{{ animal.idAnimal }}" {% if animal_filter == animal.idAnimal %}selected{% endif %}>
+                            {{ animal.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="date">Date (YYYY-MM-DD) :</label>
+                <input type="date" id="date" name="date" value="{{ date_filter }}">
+
+                <button type="submit">Filtrer</button>
+            </form>
+
+            <h2>Liste des rapports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Animal</th>
+                        <th>État</th>
+                        <th>Nourriture</th>
+                        <th>Quantité</th>
+                        <th>Date</th>
+                        <th>Détails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                        <tr>
+                            <td>{{ report.idAnimal.name }}</td>
+                            <td>{{ report.etat }}</td>
+                            <td>{{ report.nourriture }}</td>
+                            <td>{{ report.quantite }}</td>
+                            <td>{{ report.datePassage|date('Y-m-d') }}</td>
+                            <td>{{ report.details }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{ include('components/footer.html.twig') }}
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les services - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/navbar.html.twig') }}
+
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>Gérer les services</h1>
+        </div>
+
+        <div class="admin-form-container">
+            <h2>Ajouter un service</h2>
+            <form method="post">
+                <input type="hidden" name="action" value="add">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" required>
+                <label for="description">Description :</label>
+                <textarea id="description" name="description" required></textarea>
+                <label for="images">Images (JSON) :</label>
+                <input type="text" id="images" name="images">
+                <button type="submit">Ajouter</button>
+            </form>
+
+            <h2>Liste des services</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.description }}</td>
+                            <td>
+                                <form method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="id" value="{{ service.idService }}">
+                                    <input type="text" name="name" value="{{ service.name }}" required>
+                                    <textarea name="description" required>{{ service.description }}</textarea>
+                                    <input type="text" name="images" value="{{ service.images|json_encode }}">
+                                    <button type="submit">Modifier</button>
+                                </form>
+                                <form method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="{{ service.idService }}">
+                                    <button type="submit">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{ include('components/footer.html.twig') }}
+{% endblock %}

@@ -6,9 +6,11 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -115,5 +117,27 @@ class Utilisateur
         $this->services->removeElement($service);
 
         return $this;
+    }
+
+    // Implémentation de UserInterface
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email; // L'identifiant est l'email
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role]; // Transforme la chaîne role en tableau
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Rien à faire ici, car il n'y a pas d'informations sensibles temporaires
+    }
+
+    public function getSalt(): ?string
+    {
+        // Non nécessaire avec bcrypt/argon2i
+        return null;
     }
 }

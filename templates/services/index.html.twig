@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Activités - Arcadia Zoo{% endblock %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    {{ encore_entry_link_tags('navbar') }}
+    {{ encore_entry_link_tags('services') }}
+    {{ encore_entry_link_tags('footer') }}
+{% endblock %}
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+    <main class="main">
+        <section class="activites-section">
+            <h1 class="activites-title">Nos Services</h1>
+            <div class="activites-grid">
+                {% for service in services %}
+                    <div class="activites-card">
+                        {% if service.images is not empty and service.images|keys|first is same as('url') %}
+                            <img src="{{ asset(service.images.url) }}" alt="{{ service.name }}" class="activites-image">
+                        {% elseif service.images is not empty and service.images|length > 0 %}
+                            <img src="{{ asset(service.images[0]) }}" alt="{{ service.name }}" class="activites-image">
+                        {% else %}
+                            <img src="{{ asset('images/default_service.jpg') }}" alt="{{ service.name }}" class="activites-image">
+                        {% endif %}
+                        <div class="activites-text">
+                            <h2>{{ service.name }} :</h2>
+                            <p>{{ service.description|default('Aucune description disponible') }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun service disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    {% include 'components/footer.html.twig' with {'year': '2025'} %}
+{% endblock %}

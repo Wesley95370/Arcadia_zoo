@@ -2,28 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Calendrier;
 use App\Entity\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class ServicesController extends AbstractController
 {
-    #[Route('/', name: 'home')]
+    #[Route('/services', name: 'app_services')]
     public function index(EntityManagerInterface $entityManager): Response
-    {
-        $schedules = $entityManager->getRepository(Calendrier::class)->findAll();
-
-        return $this->render('home/index.html.twig', [
-            'welcome_message' => 'Bienvenue au Zoo Arcadia !',
-            'schedules' => $schedules,
-        ]);
-    }
-
-    #[Route('/services', name: 'services')]
-    public function services(EntityManagerInterface $entityManager): Response
     {
         $services = $entityManager->getRepository(Service::class)->findAll();
 

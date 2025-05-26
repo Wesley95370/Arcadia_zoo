@@ -6,7 +6,6 @@
     {{ encore_entry_link_tags('home') }}
     {{ encore_entry_link_tags('footer') }}
     {{ encore_entry_link_tags('avis') }}
-    {{ encore_entry_link_tags('hero') }}
 {% endblock %}
 {% block body %}
     {% include 'components/navbar.html.twig' %}
@@ -21,22 +20,13 @@
                 <p class="home-temperature">5°-23°</p>
             </div>
         </section>
-        {% set opening_hours = {
-            'Lundi': '9h-17h',
-            'Mardi': '9h-17h',
-            'Mercredi': '9h-17h',
-            'Jeudi': '9h-17h',
-            'Vendredi': '9h-17h',
-            'Samedi': '9h-17h',
-            'Dimanche': '9h-17h'
-        } %}
         <section class="home-section-two">
             <div class="home-left">
                 <img src="/images/image_localisation.png" alt="Localisation" class="home-left-img">
                 <h2 class="home-opening-title">Horaires d’ouverture</h2>
                 <ul class="home-opening-list">
-                    {% for day, hours in opening_hours %}
-                        <li>{{ day }} : {{ hours }}</li>
+                    {% for schedule in schedules %}
+                        <li>{{ schedule.dayOfWeek }} : {{ schedule.openingTime|date('H:i') }}-{{ schedule.closingTime|date('H:i') }} {% if schedule.isHoliday %} (Férié){% endif %}</li>
                     {% endfor %}
                 </ul>
             </div>

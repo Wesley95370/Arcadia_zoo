@@ -10,10 +10,10 @@ class Calendrier
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: 'id_calendrier')]
     private ?int $idCalendrier = null;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', length: 100)]
     private ?string $dayOfWeek = null;
 
     #[ORM\Column(type: 'time')]
@@ -23,11 +23,11 @@ class Calendrier
     private ?\DateTimeInterface $closingTime = null;
 
     #[ORM\Column(type: 'boolean')]
-    private ?bool $isHoliday = null;
+    private ?bool $isHoliday = false;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(name: 'id_admin', referencedColumnName: 'id_utilisateur', nullable: false)]
-    private ?Utilisateur $admin = null;
+    #[ORM\JoinColumn(name: 'id_admin', referencedColumnName: 'id_utilisateur')]
+    private ?Utilisateur $idAdmin = null;
 
     public function getIdCalendrier(): ?int
     {
@@ -67,25 +67,25 @@ class Calendrier
         return $this;
     }
 
-    public function isHoliday(): ?bool
+    public function getIsHoliday(): ?bool
     {
         return $this->isHoliday;
     }
 
-    public function setHoliday(bool $isHoliday): self
+    public function setIsHoliday(bool $isHoliday): self
     {
         $this->isHoliday = $isHoliday;
         return $this;
     }
 
-    public function getAdmin(): ?Utilisateur
+    public function getIdAdmin(): ?Utilisateur
     {
-        return $this->admin;
+        return $this->idAdmin;
     }
 
-    public function setAdmin(?Utilisateur $admin): self
+    public function setIdAdmin(?Utilisateur $idAdmin): self
     {
-        $this->admin = $admin;
+        $this->idAdmin = $idAdmin;
         return $this;
     }
 }

@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les horaires - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/navbar.html.twig') }}
+
+    <div class="admin-page">
+        <div class="admin-header">
+            <h1>Gérer les horaires</h1>
+        </div>
+
+        <div class="admin-form-container">
+            <h2>Ajouter un horaire</h2>
+            <form method="post">
+                <input type="hidden" name="action" value="add">
+                <label for="day_of_week">Jour de la semaine :</label>
+                <input type="text" id="day_of_week" name="day_of_week" required>
+                <label for="opening_time">Heure d'ouverture (HH:MM) :</label>
+                <input type="time" id="opening_time" name="opening_time" required>
+                <label for="closing_time">Heure de fermeture (HH:MM) :</label>
+                <input type="time" id="closing_time" name="closing_time" required>
+                <label for="is_holiday">Jour férié :</label>
+                <input type="checkbox" id="is_holiday" name="is_holiday" value="1">
+                <button type="submit">Ajouter</button>
+            </form>
+
+            <h2>Liste des horaires</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Ouverture</th>
+                        <th>Fermeture</th>
+                        <th>Férié</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for schedule in schedules %}
+                        <tr>
+                            <td>{{ schedule.dayOfWeek }}</td>
+                            <td>{{ schedule.openingTime|date('H:i') }}</td>
+                            <td>{{ schedule.closingTime|date('H:i') }}</td>
+                            <td>{{ schedule.isHoliday ? 'Oui' : 'Non' }}</td>
+                            <td>
+                                <form method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="id" value="{{ schedule.idCalendrier }}">
+                                    <input type="text" name="day_of_week" value="{{ schedule.dayOfWeek }}" required>
+                                    <input type="time" name="opening_time" value="{{ schedule.openingTime|date('H:i') }}" required>
+                                    <input type="time" name="closing_time" value="{{ schedule.closingTime|date('H:i') }}" required>
+                                    <input type="checkbox" name="is_holiday" value="1" {{ schedule.isHoliday ? 'checked' : '' }}>
+                                    <button type="submit">Modifier</button>
+                                </form>
+                                <form method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet horaire ?');">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="{{ schedule.idCalendrier }}">
+                                    <button type="submit">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{ include('components/footer.html.twig') }}
+{% endblock %}

@@ -11,7 +11,7 @@ class Animal
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: 'id_animal')]
     #[Groups(['animal:read'])]
     private ?int $idAnimal = null;
 
@@ -31,14 +31,6 @@ class Animal
     #[ORM\JoinColumn(name: 'id_habitat', referencedColumnName: 'id_habitat', nullable: true)]
     #[Groups(['animal:read'])]
     private ?Habitat $habitat = null;
-
-    #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(['animal:read'])]
-    private ?int $visits = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['animal:read'])]
-    private ?string $description = null;
 
     public function getIdAnimal(): ?int
     {
@@ -86,28 +78,6 @@ class Animal
     public function setHabitat(?Habitat $habitat): self
     {
         $this->habitat = $habitat;
-        return $this;
-    }
-
-    public function getVisits(): ?int
-    {
-        return $this->visits;
-    }
-
-    public function setVisits(?int $visits): self
-    {
-        $this->visits = $visits;
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
         return $this;
     }
 }

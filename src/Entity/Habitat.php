@@ -13,14 +13,14 @@ class Habitat
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: 'id_habitat')]
     private ?int $idHabitat = null;
 
     #[ORM\Column(type: 'string', length: 100)]
-    #[Groups(['animal:read'])] // Ajout pour inclure name dans la sérialisation
+    #[Groups(['animal:read'])]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
@@ -55,7 +55,7 @@ class Habitat
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
         return $this;
@@ -93,7 +93,6 @@ class Habitat
     public function removeAnimal(Animal $animal): self
     {
         if ($this->animals->removeElement($animal)) {
-            // set the owning side to null (unless already changed)
             if ($animal->getHabitat() === $this) {
                 $animal->setHabitat(null);
             }

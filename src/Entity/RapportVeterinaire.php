@@ -10,31 +10,31 @@ class RapportVeterinaire
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', name: 'id_rapport_veterinaire')]
     private ?int $idRapportVeterinaire = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 100)]
     private ?string $etat = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 100)]
     private ?string $nourriture = null;
 
-    #[ORM\Column(type: 'integer')]
-    private ?int $quantite = null;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $quantite = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $datePassage = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $details = null;
 
     #[ORM\ManyToOne(targetEntity: Animal::class)]
-    #[ORM\JoinColumn(name: 'id_animal', referencedColumnName: 'id_animal', nullable: false)]
-    private ?Animal $animal = null;
+    #[ORM\JoinColumn(name: 'id_animal', referencedColumnName: 'id_animal')]
+    private ?Animal $idAnimal = null;
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(name: 'id_veterinaire', referencedColumnName: 'id_utilisateur', nullable: false)]
-    private ?Utilisateur $veterinaire = null;
+    #[ORM\JoinColumn(name: 'id_veterinaire', referencedColumnName: 'id_utilisateur')]
+    private ?Utilisateur $idVeterinaire = null;
 
     public function getIdRapportVeterinaire(): ?int
     {
@@ -63,12 +63,12 @@ class RapportVeterinaire
         return $this;
     }
 
-    public function getQuantite(): ?int
+    public function getQuantite(): ?float
     {
         return $this->quantite;
     }
 
-    public function setQuantite(int $quantite): self
+    public function setQuantite(float $quantite): self
     {
         $this->quantite = $quantite;
         return $this;
@@ -90,31 +90,31 @@ class RapportVeterinaire
         return $this->details;
     }
 
-    public function setDetails(string $details): self
+    public function setDetails(?string $details): self
     {
         $this->details = $details;
         return $this;
     }
 
-    public function getAnimal(): ?Animal
+    public function getIdAnimal(): ?Animal
     {
-        return $this->animal;
+        return $this->idAnimal;
     }
 
-    public function setAnimal(?Animal $animal): self
+    public function setIdAnimal(?Animal $idAnimal): self
     {
-        $this->animal = $animal;
+        $this->idAnimal = $idAnimal;
         return $this;
     }
 
-    public function getVeterinaire(): ?Utilisateur
+    public function getIdVeterinaire(): ?Utilisateur
     {
-        return $this->veterinaire;
+        return $this->idVeterinaire;
     }
 
-    public function setVeterinaire(?Utilisateur $veterinaire): self
+    public function setIdVeterinaire(?Utilisateur $idVeterinaire): self
     {
-        $this->veterinaire = $veterinaire;
+        $this->idVeterinaire = $idVeterinaire;
         return $this;
     }
 }

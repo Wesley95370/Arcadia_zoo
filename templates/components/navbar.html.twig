@@ -1,6 +1,6 @@
 <header class="navbar">
     <div class="navbar-content">
-        <img src="/images/ArcadiaLogo.png" alt="Arcadia Zoo Logo" class="navbar-logo">
+        <img src="{{ asset('images/ArcadiaLogo.png') }}" alt="Arcadia Zoo Logo" class="navbar-logo">
         <nav>
             <ul class="nav-list">
                 <li><a href="/">Accueil</a></li>
@@ -8,7 +8,14 @@
                 <li><a href="/habitats">Habitats</a></li>
                 <li><a href="/services">Services</a></li>
                 <li><a href="/contact">Contact</a></li>
-                <li><a href="/activites">Activités</a></li>
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <li><a href="/admin">Admin</a></li>
+                {% endif %}
+                {% if app.user %}
+                    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('app_login') }}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </div>

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('styles/login.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="login-container">
+        <h2 class="login-subtitle">Connexion à l'espace Admin</h2>
+        <div class="login-form">
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{{ path('app_login') }}">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="_username" value="{{ last_username }}" required placeholder="Entrez votre email...">
+
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="_password" required placeholder="Entrez votre mot de passe...">
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button type="submit">Se Connecter</button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    {% include 'components/footer.html.twig' %}
+{% endblock %}

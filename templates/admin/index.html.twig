@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Admin - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    {# Styles globaux depuis base.html.twig #}
+    {{ parent() }}
+    {# CSS spécifique à la page admin #}
+    {{ encore_entry_link_tags('admin') }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="admin-dashboard">
+        <h1>Tableau de bord Admin - {{ admin_name }}</h1>
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="{{ path('admin_animals') }}">Animaux</a></li>
+                <li><a href="{{ path('admin_habitats') }}">Habitats</a></li>
+                <li><a href="{{ path('admin_services') }}">Services</a></li>
+                <li><a href="{{ path('admin_schedule') }}">Horaires</a></li>
+                <li><a href="{{ path('admin_reports') }}">Rapports Vétérinaires</a></li>
+                <li><a href="{{ path('admin_create_user') }}">Créer un utilisateur</a></li>
+            </ul>
+        </nav>
+
+        <div class="consultations">
+            <h2>Consultations par animal</h2>
+            {% if consultations|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Animal</th>
+                            <th>Nombre de consultations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consultation in consultations %}
+                            <tr>
+                                <td>{{ consultation.name }}</td>
+                                <td>{{ consultation.consultation_count }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucune consultation enregistrée pour le moment.</p>
+            {% endif %}
+        </div>
+
+        <div class="admin-form">
+            <h2>Création d'un compte</h2>
+            <form method="post" action="{{ path('admin_create_user') }}">
+                <label for="role">Type de compte :</label>
+                <select id="role" name="role">
+                    <option value="ROLE_VETERINAIRE">Compte vétérinaire</option>
+                    <option value="ROLE_EMPLOYE">Compte employé</option>
+                </select>
+
+                <label for="admin-email">Email :</label>
+                <input type="email" id="admin-email" name="email" placeholder="Entrez l'email..." required>
+
+                <label for="admin-password">Mot de passe :</label>
+                <input type="password" id="admin-password" name="password" placeholder="Entrez le mot de passe..." required>
+
+                <button type="submit">Créer</button>
+            </form>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% include 'components/footer.html.twig' %}
+{% endblock %}
