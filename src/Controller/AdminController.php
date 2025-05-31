@@ -29,18 +29,12 @@ class AdminController extends AbstractController
         // Récupérer le nom de l'admin connecté
         $admin = $this->getUser();
 
-        // Dashboard : nombre de consultations par animal
-        $consultations = $entityManager->createQueryBuilder()
-            ->select('a.name, COUNT(r.idRapportVeterinaire) as consultation_count')
-            ->from(Animal::class, 'a')
-            ->leftJoin(RapportVeterinaire::class, 'r', 'WITH', 'r.idAnimal = a.idAnimal')
-            ->groupBy('a.idAnimal, a.name')
-            ->getQuery()
-            ->getResult();
+        // Récupérer les visites par animal
+        $animals = $entityManager->getRepository(Animal::class)->findAll();
 
         return $this->render('admin/dashboard.html.twig', [
             'admin_name' => $admin->getEmail(),
-            'consultations' => $consultations,
+            'animals' => $animals,
         ]);
     }
 
@@ -116,7 +110,7 @@ class AdminController extends AbstractController
                 $animal->setRace($request->request->get('race'));
                 $animal->setImage(json_decode($request->request->get('image'), true));
                 $habitat = $entityManager->getRepository(Habitat::class)->find($request->request->get('id_habitat'));
-                $animal->setHabitat($habitat); // Correction : setHabitat au lieu de setIdHabitat
+                $animal->setHabitat($habitat);
                 $entityManager->persist($animal);
             } elseif ($action === 'update') {
                 $animal = $entityManager->getRepository(Animal::class)->find($request->request->get('id'));
@@ -124,7 +118,7 @@ class AdminController extends AbstractController
                 $animal->setRace($request->request->get('race'));
                 $animal->setImage(json_decode($request->request->get('image'), true));
                 $habitat = $entityManager->getRepository(Habitat::class)->find($request->request->get('id_habitat'));
-                $animal->setHabitat($habitat); // Correction : setHabitat au lieu de setIdHabitat
+                $animal->setHabitat($habitat);
             } elseif ($action === 'delete') {
                 $animal = $entityManager->getRepository(Animal::class)->find($request->request->get('id'));
                 $entityManager->remove($animal);

@@ -1,6 +1,7 @@
 .main {
     width: 100%;
 }
+
 .home-section {
     display: flex;
     justify-content: space-between;
@@ -9,12 +10,14 @@
     background-color: #8B5E3C;
     padding: 2rem;
 }
+
 .home-text {
     flex: 1;
     min-width: 300px;
     padding-right: 2rem;
     text-align: center;
 }
+
 .home-title {
     font-family: 'Peralta', cursive;
     font-size: 2.5rem;
@@ -22,68 +25,80 @@
     text-align: center;
     margin-bottom: 1rem;
 }
+
 .home-description {
     font-family: 'Caveat', cursive;
     font-size: 1.5rem;
     color: #F1E7D0;
     line-height: 1.6;
 }
+
 .home-image {
     flex: 1;
     min-width: 300px;
     text-align: center;
 }
+
 .home-image-img {
     max-width: 100%;
     height: auto;
 }
+
 .home-temperature {
     font-family: 'Merriweather', serif;
     font-size: 1.5rem;
     color: #F1E7D0;
     margin-top: 1rem;
 }
+
 .home-section-two {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    background-color: #8B5E3C;
+    background-color: #d4cbc3;
     padding: 2rem;
     position: relative;
 }
+
 .home-left {
     flex: 1;
     min-width: 300px;
     padding-right: 2rem;
     text-align: center;
 }
+
 .home-left-img {
     max-width: 100%;
     height: auto;
     margin-bottom: 1rem;
 }
+
 .home-opening-title {
     font-family: 'Merriweather', serif;
     font-size: 1.8rem;
     color: #F1E7D0;
     margin-bottom: 1rem;
 }
+
 .home-opening-list {
     list-style: none;
     padding: 0;
 }
+
 .home-opening-list li {
     font-family: 'Caveat', cursive;
     font-size: 1.5rem;
     color: #F1E7D0;
     margin-bottom: 0.5rem;
 }
+
 .home-right {
     flex: 1;
     min-width: 300px;
     text-align: right;
     position: relative;
 }
+
 .home-right-img {
     max-width: 100%;
     height: auto;
@@ -91,52 +106,71 @@
     bottom: -32px;
     right: 0;
 }
+
 .home-giraffe-section {
     width: 100%;
     margin: 2rem 0;
 }
+
 .home-giraffe-img {
     width: 100%;
     margin-top: -32px;
 }
+
+/* 🔧 STARS DU ZOO */
 .home-stars-section {
     text-align: center;
     padding: 2rem;
     margin-top: -40px;
     background-color: #8B5E3C;
 }
+
 .home-stars-section .home-stars-title {
     font-family: 'Caveat', cursive;
     font-size: 4.5rem;
     color: #F1E7D0;
     margin-bottom: 2rem;
 }
+
 .home-stars-section .home-stars-animals {
     display: flex;
     justify-content: center;
-    gap: 40rem;
-    margin-bottom: 35rem;
-    margin-right: 450px;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
-.home-stars-section .home-animal-link {
-    display: block;
-    width: 150px;
-    height: 150px;
-    text-decoration: none; /* Supprime le soulignement pour le lien et ses enfants */
+
+.home-stars-section .animal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    text-decoration: none;
+    position: relative;
 }
+
 .home-stars-section .home-animal-img {
-    width: 400%;
-    height: 400%;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 50%;
 }
-.home-stars-section .home-animal-name {
+
+.visit-count {
     font-family: 'Caveat', cursive;
-    font-size: 4.5rem;
+    font-size: 1.2rem;
     color: #F1E7D0;
     margin-top: 0.5rem;
-    margin-left: 230px;
 }
+
+.home-stars-section .home-animal-name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #F1E7D0;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
 .home-stars-section .home-all-animals-link {
     display: inline-block;
     font-family: 'Caveat', cursive;
@@ -148,7 +182,58 @@
     background: #2E7D32;
     border-radius: 50px;
 }
+
 .home-stars-section .home-all-animals-link:hover {
     background-color: #2E7D32;
     color: #FFFFFF;
+}
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+    .home-stars-section .animal-card {
+        width: 80px;
+    }
+
+    .home-stars-section .home-animal-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .home-stars-section .home-animal-name {
+        font-size: 1rem;
+    }
+
+    .home-stars-section .visit-count {
+        font-size: 1rem;
+    }
+}
+
+/* 🧱 Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #F1E7D0;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
 }

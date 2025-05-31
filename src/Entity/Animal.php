@@ -32,6 +32,14 @@ class Animal
     #[Groups(['animal:read'])]
     private ?Habitat $habitat = null;
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    #[Groups(['animal:read'])]
+    private int $visits = 0;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['animal:read'])]
+    private ?string $description = null;
+
     public function getIdAnimal(): ?int
     {
         return $this->idAnimal;
@@ -78,6 +86,34 @@ class Animal
     public function setHabitat(?Habitat $habitat): self
     {
         $this->habitat = $habitat;
+        return $this;
+    }
+
+    public function getVisits(): int
+    {
+        return $this->visits;
+    }
+
+    public function setVisits(int $visits): self
+    {
+        $this->visits = $visits;
+        return $this;
+    }
+
+    public function incrementVisits(): self
+    {
+        $this->visits++;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
         return $this;
     }
 }

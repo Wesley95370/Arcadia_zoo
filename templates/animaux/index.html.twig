@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{{ asset('css/animaux.css') }}">
 {% endblock %}
 
+{% block extra_stylesheets %}
+    {{ encore_entry_link_tags('animaux') }}
+    <script src="/build/runtime.js" defer></script>
+    <script src="/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_core-js_modules_es_da-bac160.js" defer></script>
+    <script src="/build/app.js" defer></script>
+{% endblock %}
+
 {% block body %}
     {{ include('components/navbar.html.twig') }}
 
@@ -33,7 +40,7 @@
                 <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal.idAnimal }})">
                     <img src="{{ animal.image.url|default('/images/ArcadiaLogo.png') }}" alt="{{ animal.name }}">
                     <h3>{{ animal.name }}</h3>
-                    <p>Visites : <span class="visit-count">{{ animal.visits|default(0) }}</span></p>
+                    <p>Visites : <span class="visit-count" data-animal-id="{{ animal.idAnimal }}">{{ animal.visits|default(0) }}</span></p>
                 </div>
             {% endfor %}
         </div>
@@ -133,8 +140,8 @@
 
     <script>
         // Données initiales des animaux (passées depuis le contrôleur)
-        let animals = {{ jsonAnimals|raw }};
-        console.log('Animals data:', animals);
+        let animalsData = {{ jsonAnimals|raw }};
+        console.log('Animals data:', animalsData);
 
         // Filtrer les animaux par habitat
         function filterAnimals(habitat) {
@@ -143,72 +150,66 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.filter-button[data-habitat="${habitat}"]`).classList.add('active');
 
-            let filteredAnimals;
-            if (habitat === 'Tout') {
-                filteredAnimals = animals;
-            } else {
-                filteredAnimals = animals.filter(animal => {
-                    const habitatName = animal.habitat?.name?.trim();
-                    console.log(`Comparing ${habitatName} with ${habitat}`);
-                    return habitatName === habitat;
-                });
-            }
+            const animalCards = document.querySelectorAll('.animal-card');
+            animalCards.forEach(card => {
+                const animalId = parseInt(card.dataset.animalId);
+                const animal = animalsData.find(a => a.idAnimal === animalId);
+                const animalHabitat = animal && animal.habitat ? animal.habitat.name : 'Unknown';
 
-            const grid = document.querySelector('.animals-grid');
-            grid.innerHTML = '';
-            if (filteredAnimals.length === 0) {
-                grid.innerHTML = '<p>Aucun animal trouvé pour cet habitat.</p>';
-            } else {
-                filteredAnimals.forEach(animal => {
-                    grid.innerHTML += `
-                        <div class="animal-card" data-animal-id="${animal.idAnimal}" onclick="showAnimalModal(${animal.idAnimal})">
-                            <img src="${animal.image?.url || '/images/ArcadiaLogo.png'}" alt="${animal.name}">
-                            <h3>${animal.name}</h3>
-                            <p>Visites : <span class="visit-count">${animal.visits || 0}</span></p>
-                        </div>
-                    `;
-                });
-            }
+                if (habitat === 'Tout' || animalHabitat === habitat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
 
         // Afficher le modal avec les détails de l'animal
         function showAnimalModal(animalId) {
             // Trouver l’animal dans le tableau animals
-            const animal = animals.find(a => a.idAnimal === animalId);
+            const animal = animalsData.find(a => a.idAnimal === animalId);
             if (!animal) {
                 console.error('Animal non trouvé:', animalId);
                 return;
             }
 
             console.log('Animal clicked:', animal);
-            console.log('Image data:', animal.image);
 
             // Incrémenter le compteur de visites
-            fetch(`/api/animals/${animal.idAnimal}/increment-visits`, { method: 'POST' })
-                .then(response => response.json())
+            fetch(`/animaux/api/animals/${animal.idAnimal}/increment-visits`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(updatedAnimal => {
-                    animals = animals.map(a => a.idAnimal === updatedAnimal.idAnimal ? updatedAnimal : a);
-                    document.querySelector(`.animal-card[data-animal-id="${animal.idAnimal}"] .visit-count`).textContent = updatedAnimal.visits || 0;
+                    console.log('Visite incrémentée:', updatedAnimal);
+                    // Mettre à jour les données locales
+                    animalsData = animalsData.map(a => a.idAnimal === updatedAnimal.idAnimal ? updatedAnimal : a);
+                    // Mettre à jour l'affichage du nombre de visites
+                    const visitCountSpan = document.querySelector(`.visit-count[data-animal-id="${animal.idAnimal}"]`);
+                    if (visitCountSpan) {
+                        visitCountSpan.textContent = updatedAnimal.visits || 0;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l’incrémentation des visites:', error);
                 });
 
             // Remplir le modal
             const modal = document.getElementById('animalModal');
             document.getElementById('modal-animal-name').textContent = animal.name;
 
-            // Gérer différents formats d'image
-            let imageUrl = '/images/ArcadiaLogo.png'; // Fallback par défaut
-            if (animal.image) {
-                try {
-                    // Si animal.image est une chaîne JSON, parser
-                    const imageObj = typeof animal.image === 'string' ? JSON.parse(animal.image) : animal.image;
-                    if (imageObj && imageObj.url) {
-                        imageUrl = imageObj.url;
-                    } else if (typeof animal.image === 'string') {
-                        imageUrl = animal.image; // Cas où image est juste une URL
-                    }
-                } catch (e) {
-                    console.error('Erreur lors du parsing de l\'image:', e);
-                }
+            // Gérer l'image
+            let imageUrl = '/images/ArcadiaLogo.png'; // Fallback
+            if (animal.image && animal.image.url) {
+                imageUrl = animal.image.url;
             }
             console.log('Image URL set to:', imageUrl);
             document.getElementById('modal-animal-image').src = imageUrl;
@@ -256,14 +257,19 @@
                 visits: 0,
             };
 
-            fetch('/api/animals', {
+            fetch('/animaux/api/animals', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newAnimal),
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    animals.push(data);
+                    animalsData.push(data);
                     filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
                     closeAddModal();
                 })
@@ -280,14 +286,19 @@
                 description: form.description.value,
             };
 
-            fetch(`/api/animals/${animalId}`, {
+            fetch(`/animaux/api/animals/${animalId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedAnimal),
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    animals = animals.map(a => a.idAnimal === data.idAnimal ? data : a);
+                    animalsData = animalsData.map(a => a.idAnimal === data.idAnimal ? data : a);
                     document.getElementById('modal-animal-race').textContent = data.race;
                     document.getElementById('modal-animal-description').textContent = data.description || 'Aucune description';
                     filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
@@ -300,11 +311,14 @@
         function deleteAnimal() {
             const animalId = document.getElementById('modal-animal-id').value;
             if (confirm('Êtes-vous sûr de vouloir supprimer cet animal ?')) {
-                fetch(`/api/animals/${animalId}`, {
+                fetch(`/animaux/api/animals/${animalId}`, {
                     method: 'DELETE',
                 })
-                    .then(() => {
-                        animals = animals.filter(a => a.idAnimal !== parseInt(animalId));
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok: ' + response.statusText);
+                        }
+                        animalsData = animalsData.filter(a => a.idAnimal !== parseInt(animalId));
                         filterAnimals(document.querySelector('.filter-button.active').dataset.habitat);
                         closeModal();
                     })

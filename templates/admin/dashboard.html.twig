@@ -25,19 +25,19 @@
         </div>
 
         <div class="dashboard-stats">
-            <h2>Nombre de consultations par animal</h2>
+            <h2>Visites par animal</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Animal</th>
-                        <th>Nombre de consultations</th>
+                        <th>Nombre de visites</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for consultation in consultations %}
+                    {% for animal in animals %}
                         <tr>
-                            <td>{{ consultation.name }}</td>
-                            <td>{{ consultation.consultation_count }}</td>
+                            <td>{{ animal.name }}</td>
+                            <td>{{ animal.visits|default(0) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

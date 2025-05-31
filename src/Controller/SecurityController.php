@@ -12,14 +12,16 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Récupérer les erreurs de connexion (si elles existent)
         $error = $authenticationUtils->getLastAuthenticationError();
-        // Récupérer le dernier email saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $recaptchaSiteKey = $_ENV['GOOGLE_RECAPTCHA_SITE_KEY'] ?? '';
+        
+
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername, // Changé de last_email à last_username
+            'last_username' => $lastUsername,
             'error' => $error,
+            'recaptcha_site_key' => $recaptchaSiteKey,
         ]);
     }
 
@@ -28,4 +30,5 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+    
 }

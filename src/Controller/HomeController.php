@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Calendrier;
+use App\Entity\Animal;
 use App\Entity\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,9 +17,19 @@ class HomeController extends AbstractController
     {
         $schedules = $entityManager->getRepository(Calendrier::class)->findAll();
 
+        // Récupérer les 2 animaux avec le plus de visites
+        $topAnimals = $entityManager->createQueryBuilder()
+            ->select('a')
+            ->from(Animal::class, 'a')
+            ->orderBy('a.visits', 'DESC')
+            ->setMaxResults(2)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home/index.html.twig', [
             'welcome_message' => 'Bienvenue au Zoo Arcadia !',
             'schedules' => $schedules,
+            'top_animals' => $topAnimals,
         ]);
     }
 
@@ -31,4 +42,5 @@ class HomeController extends AbstractController
             'services' => $services,
         ]);
     }
+    
 }

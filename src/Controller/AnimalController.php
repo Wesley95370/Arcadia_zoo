@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -34,7 +35,7 @@ class AnimalController extends AbstractController
         $animal->setName($data['name']);
         $animal->setRace($data['race']);
         $animal->setImage(['url' => $data['image']['url']]);
-        $animal->setHabitat($habitatRepository->find($data['idHabitat'])); // Correction : setHabitat au lieu de setIdHabitat
+        $animal->setHabitat($habitatRepository->find($data['idHabitat']));
         $animal->setVisits($data['visits'] ?? 0);
         $animal->setDescription($data['description'] ?? null);
 
@@ -74,6 +75,23 @@ class AnimalController extends AbstractController
         return new JsonResponse(null, 204);
     }
 
+    #[Route('/{id}/visit', name: 'animal_increment_visit', methods: ['GET'])]
+    public function incrementVisit(int $id, AnimalRepository $animalRepository): RedirectResponse
+    {
+        $animal = $animalRepository->find($id);
+        if (!$animal) {
+            $this->addFlash('error', 'Animal non trouvé');
+            return $this->redirectToRoute('app_animals');
+        }
+
+        $animal->incrementVisits();
+        $animalRepository->save($animal, true);
+
+        $this->addFlash('success', sprintf('Visite incrémentée pour %s. Total: %d', $animal->getName(), $animal->getVisits()));
+
+        return $this->redirectToRoute('app_animals');
+    }
+
     #[Route('/api/animals/{id}/increment-visits', name: 'api_animals_increment_visits', methods: ['POST'])]
     public function incrementVisits(int $id, AnimalRepository $animalRepository, SerializerInterface $serializer): JsonResponse
     {
@@ -82,7 +100,7 @@ class AnimalController extends AbstractController
             return new JsonResponse(['error' => 'Animal not found'], 404);
         }
 
-        $animal->setVisits(($animal->getVisits() ?? 0) + 1);
+        $animal->incrementVisits();
         $animalRepository->save($animal, true);
 
         $json = $serializer->serialize($animal, 'json', ['groups' => 'animal:read']);

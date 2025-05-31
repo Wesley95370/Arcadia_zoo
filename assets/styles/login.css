@@ -1,5 +1,5 @@
 body {
-    background-color: #8B4513; /* Fond marron du design */
+    background-color: #8B4513;
     font-family: 'Caveat', cursive;
     margin: 0;
     padding: 0;
@@ -10,18 +10,18 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    color: #5C4033; /* Couleur marron foncé pour le texte */
+    color: #5C4033;
 }
 
 .login-subtitle {
     font-family: 'Peralta', cursive;
-    color: #F5F5DC; /* Beige clair pour le titre */
+    color: #F5F5DC;
     margin-bottom: 20px;
     font-size: 24px;
 }
 
 .login-form {
-    background-color: #F5F5DC; /* Fond beige clair du formulaire */
+    background-color: #F5F5DC;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -45,8 +45,14 @@ body {
     font-size: 16px;
 }
 
+.login-form .g-recaptcha {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
 .login-form button {
-    background-color: #5C4033; /* Bouton marron */
+    background-color: #5C4033;
     color: white;
     padding: 10px;
     border: none;
@@ -58,7 +64,7 @@ body {
 }
 
 .login-form button:hover {
-    background-color: #4A3627; /* Légère variation au survol */
+    background-color: #4A3627;
 }
 
 .alert-danger {
@@ -71,7 +77,120 @@ body {
 }
 
 .footer-section {
-    background-color: #2E8B57; /* Vert du footer */
+    background-color: #2E8B57;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.footer-logo-img {
+    width: 150px;
+    height: auto;
+}
+
+.footer-columns {
+    display: flex;
+    gap: 50px;
+}
+
+.footer-column h3 {
+    font-family: 'Peralta', cursive;
+    margin-bottom: 10px;
+}
+
+.footer-column p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+
+
+
+
+
+body {
+    background-color: #8B4513;
+    font-family: 'Caveat', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: #5C4033;
+}
+
+.login-subtitle {
+    font-family: 'Peralta', cursive;
+    color: #F5F5DC;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.login-form {
+    background-color: #F5F5DC;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.login-form input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #5C4033;
+    border-radius: 5px;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+}
+
+.login-form .g-recaptcha {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.login-form button {
+    background-color: #5C4033;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+}
+
+.login-form button:hover {
+    background-color: #4A3627;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+}
+
+.footer-section {
+    background-color: #2E8B57;
     color: white;
     padding: 20px;
     display: flex;

@@ -1,0 +1,90 @@
+.habitat-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Caveat', cursive;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-family: 'Peralta', cursive;
+    font-size: 2.5em;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.habitat-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.habitat-card {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+.habitat-name {
+    font-family: 'Peralta', cursive;
+    font-size: 1.8em;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.habitat-image {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.habitat-description {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.habitat-card h3 {
+    font-family: 'Peralta', cursive;
+    font-size: 1.4em;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.animal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.animal-list li {
+    margin-bottom: 8px;
+    font-size: 1em;
+    color: #444;
+}
+
+.animal-list li a {
+    color: #2e7d32;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.animal-list li a:hover {
+    color: #4caf50;
+    text-decoration: underline;
+}

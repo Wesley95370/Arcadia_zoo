@@ -1,3 +1,4 @@
+# config/packages/security.yaml
 security:
     enable_authenticator_manager: true
 
@@ -18,13 +19,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-                default_target_path: admin_dashboard  # Redirige vers /admin après connexion réussie
-                always_use_default_target_path: false  # N’utilise pas default_target_path en cas d’échec
-                failure_path: app_login  # Reste sur /login en cas d’échec
+            custom_authenticator: App\security\LoginFormAuthenticator
             logout:
                 path: app_logout
                 target: app_login

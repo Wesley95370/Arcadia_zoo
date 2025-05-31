@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Accueil - Arcadia Zoo{% endblock %}
+
 {% block stylesheets %}
     <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Peralta&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     {{ encore_entry_link_tags('navbar') }}
@@ -7,6 +9,7 @@
     {{ encore_entry_link_tags('footer') }}
     {{ encore_entry_link_tags('avis') }}
 {% endblock %}
+
 {% block body %}
     {% include 'components/navbar.html.twig' %}
     <main class="main">
@@ -37,23 +40,93 @@
         <section class="home-giraffe-section">
             <img src="/images/image_girafe.jpg" alt="Groupe de Girafes" class="home-giraffe-img">
         </section>
-        {% set top_animals = [
-            {'name': 'Koba', 'image': 'image_gorille_rond.jpg', 'slug': 'Koba'},
-            {'name': 'Simba', 'image': 'image_lion_rond.jpg', 'slug': 'Simba'}
-        ] %}
         <section class="home-stars-section">
             <h2 class="home-stars-title">Les stars du zoo !</h2>
             <div class="home-stars-animals">
                 {% for animal in top_animals %}
-                    <a href="#" class="home-animal-link">
-                        <img src="/images/{{ animal.image }}" alt="{{ animal.name }}" class="home-animal-img">
+                    <div class="animal-card" data-animal-id="{{ animal.idAnimal }}" onclick="showAnimalModal({{ animal.idAnimal }})">
+                        <img src="{{ animal.image.url|default('/images/ArcadiaLogo.png') }}" alt="{{ animal.name }}" class="home-animal-img">
                         <p class="home-animal-name">{{ animal.name }}</p>
-                    </a>
+                        <p>Visites : <span class="visit-count">{{ animal.visits|default(0) }}</span></p>
+                    </div>
                 {% endfor %}
             </div>
-            <a href="#" class="home-all-animals-link">Voir tous les animaux</a>
+            <a href="{{ path('app_animals') }}" class="home-all-animals-link">Voir tous les animaux</a>
         </section>
         {% include 'components/avis.html.twig' %}
     </main>
+
+    <!-- Modal pour les détails de l'animal -->
+    <div class="modal" id="animalModal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2 id="modal-animal-name"></h2>
+            <img id="modal-animal-image" src="" alt="">
+            <p><strong>Race :</strong> <span id="modal-animal-race"></span></p>
+            <p><strong>Habitat :</strong> <span id="modal-animal-habitat"></span></p>
+            <p><strong>Description :</strong> <span id="modal-animal-description"></span></p>
+            <p><strong>Visites :</strong> <span id="modal-animal-visits"></span></p>
+        </div>
+    </div>
+
     {% include 'components/footer.html.twig' with {'year': '2025'} %}
+
+    <script>
+        // Données initiales des animaux (passées depuis le contrôleur)
+        let animals = {{ top_animals|json_encode|raw }};
+
+        // Afficher le modal avec les détails de l'animal
+        function showAnimalModal(animalId) {
+            const animal = animals.find(a => a.idAnimal === animalId);
+            if (!animal) {
+                console.error('Animal non trouvé:', animalId);
+                return;
+            }
+
+            console.log('Animal clicked:', animal);
+
+            // Incrémenter le compteur de visites
+            fetch(`/animaux/api/animals/${animalId}/increment-visits`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(updatedAnimal => {
+                console.log('Visite incrémentée:', updatedAnimal);
+                animals = animals.map(a => a.idAnimal === updatedAnimal.idAnimal ? updatedAnimal : a);
+                document.querySelector(`.animal-card[data-animal-id="${animalId}"] .visit-count`).textContent = updatedAnimal.visits || 0;
+                document.getElementById('modal-animal-visits').textContent = updatedAnimal.visits || 0;
+            })
+            .catch(error => {
+                console.error('Erreur lors de l’incrémentation des visites:', error);
+            });
+
+            // Remplir le modal
+            const modal = document.getElementById('animalModal');
+            document.getElementById('modal-animal-name').textContent = animal.name;
+            let imageUrl = '/images/ArcadiaLogo.png';
+            if (animal.image && animal.image.url) {
+                imageUrl = animal.image.url;
+            }
+            document.getElementById('modal-animal-image').src = imageUrl;
+            document.getElementById('modal-animal-race').textContent = animal.race || 'Non spécifiée';
+            document.getElementById('modal-animal-habitat').textContent = animal.habitat?.name || 'Aucun';
+            document.getElementById('modal-animal-description').textContent = animal.description || 'Aucune description';
+            document.getElementById('modal-animal-visits').textContent = animal.visits || 0;
+
+            modal.style.display = 'flex';
+        }
+
+        // Fermer le modal des détails
+        function closeModal() {
+            document.getElementById('animalModal').style.display = 'none';
+        }
+    </script>
 {% endblock %}

@@ -11,7 +11,7 @@ Encore
     .addEntry('animaux', './assets/styles/animaux.css')
     .addEntry('contact', './assets/styles/contact.css')
     .addEntry('services', './assets/styles/services.css')
-    .addEntry('admin', './assets/styles/admin.css')
+    .addEntry('habitat', './assets/styles/habitat.css')
     .addEntry('login', './assets/styles/login.css')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

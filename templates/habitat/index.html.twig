@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Habitats - Arcadia Zoo{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/css2?family=Peralta&family=Caveat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('styles/habitat.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/navbar.html.twig') }}
+
+    <div class="habitat-page">
+        <div class="header">
+            <h1>Nos Habitats</h1>
+            <p>Découvrez les différents habitats du Zoo Arcadia et les animaux qui y vivent.</p>
+        </div>
+
+        <div class="habitat-list">
+            {% for habitat in habitats %}
+                <div class="habitat-card">
+                    <h2 class="habitat-name">{{ habitat.name }}</h2>
+                    {% if habitat.image and habitat.image.url %}
+                        <img src="{{ habitat.image.url }}" alt="{{ habitat.name }}" class="habitat-image">
+                    {% else %}
+                        <img src="{{ asset('images/placeholder.jpg') }}" alt="Image par défaut" class="habitat-image">
+                    {% endif %}
+                    <p class="habitat-description">{{ habitat.description }}</p>
+                    <h3>Animaux dans cet habitat</h3>
+                    {% if habitat.animals|length > 0 %}
+                        <ul class="animal-list">
+                            {% for animal in habitat.animals %}
+                                <li>
+                                    <a href="{{ path('animal_increment_visit', {'id': animal.idAnimal}) }}">
+                                        {{ animal.name }} ({{ animal.race }}) - Visites : {{ animal.visits }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Aucun animal dans cet habitat pour le moment.</p>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p>Aucun habitat disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    {{ include('components/footer.html.twig') }}
+{% endblock %}
