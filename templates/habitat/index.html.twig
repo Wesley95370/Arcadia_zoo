@@ -20,8 +20,12 @@
             {% for habitat in habitats %}
                 <div class="habitat-card">
                     <h2 class="habitat-name">{{ habitat.name }}</h2>
-                    {% if habitat.image and habitat.image.url %}
-                        <img src="{{ habitat.image.url }}" alt="{{ habitat.name }}" class="habitat-image">
+                    {% if habitat.name == 'Savane' %}
+                        <img src="{{ asset('images/Savane_mini.jpg') }}" alt="{{ habitat.name }}" class="habitat-image">
+                    {% elseif habitat.name == 'Jungle' %}
+                        <img src="{{ asset('images/Jungle_mini.jpg') }}" alt="{{ habitat.name }}" class="habitat-image">
+                    {% elseif habitat.name == 'Marais' %}
+                        <img src="{{ asset('images/Marais_mini.jpg') }}" alt="{{ habitat.name }}" class="habitat-image">
                     {% else %}
                         <img src="{{ asset('images/placeholder.jpg') }}" alt="Image par défaut" class="habitat-image">
                     {% endif %}

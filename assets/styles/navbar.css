@@ -5,6 +5,7 @@ header {
     position: relative;
     min-height: 600px;
 }
+
 header > div {
     display: flex;
     justify-content: space-between;
@@ -13,9 +14,11 @@ header > div {
     position: relative;
     z-index: 1;
 }
+
 header img {
     height: 80px;
 }
+
 nav ul {
     list-style: none;
     display: flex;
@@ -24,6 +27,7 @@ nav ul {
     padding: 0;
     -webkit-text-stroke: 0.1px maroon; /* Chrome/Safari */
 }
+
 nav ul li a {
     color: #8B5E3C;
     font-family: 'Peralta', cursive;
@@ -31,9 +35,11 @@ nav ul li a {
     font-size: 1.2rem;
     font-weight: bold;
 }
+
 nav ul li a:hover {
     color: #6b4523;
 }
+
 header > div.slogan {
     position: absolute;
     bottom: 1rem;
@@ -41,4 +47,88 @@ header > div.slogan {
     color: #F1E7D0;
     font-family: 'Caveat', cursive;
     font-size: 2.2rem;
+}
+
+/* Styles pour le menu burger */
+.burger-menu {
+    display: none; /* Masqué par défaut sur grand écran */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 2;
+}
+
+.burger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #8B5E3C;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.burger-menu.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.burger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Menu déroulant */
+.nav-list {
+    display: flex;
+}
+
+.nav-list.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(139, 94, 60, 0.9); /* Fond semi-transparent */
+    padding: 1rem;
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.nav-list li {
+    margin: 0.5rem 0;
+}
+
+.nav-list li a {
+    color: #F1E7D0; /* Changement de couleur pour lisibilité */
+}
+
+.nav-list li a:hover {
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: block;
+    }
+
+    .nav-list {
+        display: none;
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    .nav-list.active {
+        display: flex;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
 }
